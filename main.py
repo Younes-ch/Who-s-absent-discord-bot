@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import logging
-from keep_alive import keep_alive
+# from keep_alive import keep_alive
 import os
 
 intents = discord.Intents.all()
