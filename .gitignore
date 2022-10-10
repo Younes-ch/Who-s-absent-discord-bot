@@ -1,2 +1,8 @@
 .env
 .replit
+venv
+.config
+replit*
+.upm
+poetry*
+pyproject*
