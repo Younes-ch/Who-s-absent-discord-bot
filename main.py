@@ -1,12 +1,11 @@
 import discord
-from discord.ext import tasks, commands
+from discord.ext import commands
 import logging
 import os
 
 intents = discord.Intents.all()
 logging.basicConfig(level=logging.INFO)
-activity = discord.Activity(type=discord.ActivityType.listening, name="&help")
-bot = commands.Bot(command_prefix='&', intents=intents, activity=activity)
+bot = commands.Bot(command_prefix='&', intents=intents)
 
 
 @bot.event
@@ -14,13 +13,13 @@ async def on_ready():
   print("Ready!")
 
 @bot.command()
-async def chkunabsent(ctx):
+@commands.has_any_role("Leads", "Younes")
+async def chkunabsent(ctx, *, role : discord.Role):
   if ctx.author.voice == None:
     await ctx.send(f"{ctx.author.mention} Lezim tabda fi voice channel!")
   else:
-    core_team_role = ctx.guild.get_role(1028809168875966526)
     chkun_absent = []
-    for member in core_team_role.members:
+    for member in role.members:
       if not member.voice:
         chkun_absent.append(member)
       elif member.voice.channel != ctx.author.voice.channel:
@@ -36,5 +35,18 @@ async def chkunabsent(ctx):
         await ctx.send(f"{msg[:-2]} bech t7el el cam ki tji w ezreb ru7yk la njik bchleka.")
       else:
         await ctx.send(f"{msg[:-2]}\nbech t7elu el cam ki tjiw w ezrebu rwe7kum la njikum bchleka.")
-        
-bot.run(os.getenv("TOKEN"))
+
+@chkunabsent.error
+async def chkunabsent_error(ctx, error : commands.CommandError):
+  print(error)
+  if isinstance(error, commands.RoleNotFound):
+    await ctx.message.add_reaction("❌")
+    await ctx.send("Role mahuch mawjud manaarch mnin tlaat bih. 🤔")
+  elif isinstance(error, commands.CheckFailure):
+    await ctx.message.add_reaction("❌")
+    await ctx.send("allah ghaleb sala7iyetik ma7douda. 😏")
+  else:
+    await ctx.message.add_reaction("❌")
+    await ctx.send("Zidna el role yarhem bouk! 🤦")
+    
+bot.run(os.environ["TOKEN"])
