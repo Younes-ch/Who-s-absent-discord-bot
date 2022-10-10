@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import logging
+from keep_alive import keep_alive
 import os
 
 intents = discord.Intents.all()
@@ -48,5 +49,6 @@ async def chkunabsent_error(ctx, error : commands.CommandError):
   else:
     await ctx.message.add_reaction("❌")
     await ctx.send("Zidna el role yarhem bouk! 🤦")
-    
+
+keep_alive()
 bot.run(os.environ["TOKEN"])

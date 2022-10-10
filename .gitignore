@@ -6,3 +6,4 @@ replit*
 .upm
 poetry*
 pyproject*
+keep_alive.py
