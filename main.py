@@ -50,5 +50,5 @@ async def chkunabsent_error(ctx, error : commands.CommandError):
     await ctx.message.add_reaction("❌")
     await ctx.send("Zidna el role yarhem bouk! 🤦")
 
-keep_alive()
+# keep_alive()
 bot.run(os.environ["TOKEN"])
