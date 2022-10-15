@@ -5,6 +5,7 @@ import logging
 import os
 
 intents = discord.Intents.all()
+activity = discord.Activity(type=discord.ActivityType.listening, name="&chkunabsent")
 logging.basicConfig(level=logging.INFO)
 bot = commands.Bot(command_prefix='&', intents=intents)
 
