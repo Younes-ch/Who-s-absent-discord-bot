@@ -1,9 +1,12 @@
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 import logging
 # from keep_alive import keep_alive
 import os
 
+
+load_dotenv()
 intents = discord.Intents.all()
 activity = discord.Activity(type=discord.ActivityType.listening, name="&chkunabsent")
 logging.basicConfig(level=logging.INFO)
