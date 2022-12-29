@@ -7,8 +7,8 @@ class Chkunabsent(commands.Cog):
         self.bot = bot
 
     @app_commands.command(description="Tchuf les membres eli aandhum el role mawjoudin fil voice channel wela lé")
-    @app_commands.describe(role="Akthar el role")
-    @app_commands.checks.has_any_role("Leads", "Younes")
+    @app_commands.describe(role="A5tar el role")
+    @app_commands.checks.has_any_role("Leads", "Younes", ".")
     async def chkunabsent(self, interaction: discord.Interaction, role: discord.Role):
         if interaction.user.voice is None:
             await interaction.response.send_message(f"{interaction.user.mention} Lezim tabda fi voice channel!", ephemeral=True)
