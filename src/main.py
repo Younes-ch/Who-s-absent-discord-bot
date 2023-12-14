@@ -6,7 +6,7 @@ import os
 class Bot(commands.Bot):
   def __init__(self):
     super().__init__(command_prefix="?", intents=discord.Intents.all(), activity=discord.Activity(type=discord.ActivityType.listening, name="/chkunabsent"))
-    self.available_commands = ["commands.chkunabsent"]
+    self.available_commands = ["commands.chkunabsent", "commands.monitor_chat"]
 
   async def on_ready(self):
     print("Ready!")
