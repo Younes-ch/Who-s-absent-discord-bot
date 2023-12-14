@@ -1,0 +1,13 @@
+# Ignore version control files
+.git/
+.gitignore
+
+# Ignore Docker-specific files
+Dockerfile
+.dockerignore
+
+# Ignore local development files
+.env
+
+# Ignore virtual environment files
+.venv/
