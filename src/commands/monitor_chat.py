@@ -6,12 +6,21 @@ import discord
 class MonitorChat(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.interaction = None
+        self.interactions : dict[int, discord.Interaction] = {}
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        for guild in self.bot.guilds:
+            self.interactions[guild.id] = None
 
     @app_commands.command(description="Deletes every message sent in the channel except yours and other bots'.")
     @app_commands.checks.has_any_role("Leads", "Younes", ".")
     async def shut_up(self, interaction: discord.Interaction):
-        self.interaction = interaction
+        if self.interactions[interaction.guild.id] is not None:
+            await interaction.response.send_message("I'm already deleting messages in this channel.", ephemeral=True)
+            return
+        
+        self.interactions[interaction.guild.id] = interaction
         await interaction.response.send_message(
             "**================================= 🤫 Dhrari tethawech wena ndhala harka7 harka7 🤫 ========================================**"
         )
@@ -19,21 +28,25 @@ class MonitorChat(commands.Cog):
     @app_commands.command(description="Stops deleting every message sent in the channel.")
     @app_commands.checks.has_any_role("Leads", "Younes", ".")
     async def stop(self, interaction: discord.Interaction):
-        if self.interaction is None:
+        if self.interactions[interaction.guild.id] is None:
             await interaction.response.send_message("I'm not deleting messages in this channel.", ephemeral=True)
             return
         
-        self.interaction = None
+        self.interactions[interaction.guild.id] = None
         await interaction.response.send_message(
             "**===================================== Arj3u ahkiw ay ==========================================**"
         )
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if self.interaction is not None:
-            if message.channel == self.interaction.channel:
-                if message.author != self.interaction.user and not message.author.bot:
+        if message.type is not discord.MessageType.chat_input_command and self.interactions[message.guild.id] is not None:
+            if message.channel == self.interactions[message.guild.id].channel:
+                if message.author != self.interactions[message.guild.id].user and not message.author.bot:
                     await message.delete()
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild: discord.Guild):
+        self.interactions[guild.id] = None
 
     @shut_up.error
     @stop.error
