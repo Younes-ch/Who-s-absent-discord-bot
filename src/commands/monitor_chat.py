@@ -48,6 +48,10 @@ class MonitorChat(commands.Cog):
     async def on_guild_join(self, guild: discord.Guild):
         self.interactions[guild.id] = None
 
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild: discord.Guild):
+        self.interactions.pop(guild.id)
+
     @shut_up.error
     @stop.error
     async def shut_up_error(self, interaction: discord.Interaction, error: Exception):
