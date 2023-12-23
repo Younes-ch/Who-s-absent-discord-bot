@@ -14,24 +14,20 @@ class MonitorChat(commands.Cog):
             self.interactions[guild.id] = {}
 
     @app_commands.command(description="Deletes every message sent in the channel except yours and other bots'.")
-    @app_commands.checks.has_any_role("Leads", "Younes", ".")
+    @app_commands.checks.has_any_role("Leads", "Younes")
     async def shut_up(self, interaction: discord.Interaction):
         try:
-            if self.interactions[interaction.guild.id][interaction.channel.id]:
+            if self.interactions[interaction.guild.id][interaction.channel_id]:
                 await interaction.response.send_message("I'm already deleting messages in this channel.", ephemeral=True)
                 return
         except KeyError:
-            self.interactions[interaction.guild.id][
-                interaction.channel.id
-            ] = interaction
+            self.interactions[interaction.guild.id][interaction.channel_id] = interaction
             await interaction.response.send_message(
             "**================================= 🤫 Dhrari tethawech wena ndhala harka7 harka7 🤫 ========================================**"
         )
 
-    @app_commands.command(
-        description="Stops deleting every message sent in the channel."
-    )
-    @app_commands.checks.has_any_role("Leads", "Younes", ".")
+    @app_commands.command(description="Stops deleting every message sent in the channel.")
+    @app_commands.checks.has_any_role("Leads", "Younes")
     async def stop(self, interaction: discord.Interaction):
         try:
             if self.interactions[interaction.guild.id][interaction.channel.id]:
@@ -45,7 +41,7 @@ class MonitorChat(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if (message.type is not discord.MessageType.chat_input_command and self.interactions[message.guild.id].get(message.channel.id)):
-            if message.channel == self.interactions[message.guild.id][message.channel.id].channel_id:
+            if message.channel.id == self.interactions[message.guild.id][message.channel.id].channel_id:
                 if (message.author != self.interactions[message.guild.id][message.channel.id].user and not message.author.bot):
                     await message.delete()
 
