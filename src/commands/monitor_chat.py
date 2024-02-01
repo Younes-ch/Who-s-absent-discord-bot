@@ -27,7 +27,7 @@ class MonitorChat(commands.Cog):
         )
 
     @app_commands.command(description="Stops deleting every message sent in the channel.")
-    @app_commands.checks.has_any_role("Leads", "Younes")
+    @app_commands.checks.has_any_role("Leads", "Younes", "Technical Committee")
     async def stop(self, interaction: discord.Interaction):
         try:
             if self.interactions[interaction.guild.id][interaction.channel.id]:
